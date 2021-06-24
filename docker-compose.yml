@@ -1,0 +1,25 @@
+version: '3'
+
+services:
+  db:
+    image: postgres
+    container_name: livraria-db
+    restart: always
+    environment:
+      - POSTGRES_DB=livraria
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - "5440:5432"
+  web:
+    image: python:3.9.5-buster
+    container_name: livraria-web
+    build: .
+    environment:
+      - DB_HOST=db
+    entrypoint: /code/docker-entrypoint.sh
+    volumes:
+      - .:/code
+    ports:
+      - "8001:8001"
+    depends_on:
+      - db
